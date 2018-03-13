@@ -7,4 +7,6 @@
 
 service 'crio' do
   action [:enable, :start]
+  subscribes :restart, 'file[/etc/sysconfig/crio-storage]', :delayed
+  subscribes :restart, 'file[/etc/sysconfig/crio-network]', :delayed
 end

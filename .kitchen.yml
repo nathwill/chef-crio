@@ -10,10 +10,13 @@ verifier:
 
 platforms:
   - name: centos-7
-  - name: fedora-27
 
 suites:
   - name: default
     run_list:
       - recipe[crio::default]
       - recipe[test::resources]
+    attributes:
+      crio:
+        network:
+         - --enable-metrics

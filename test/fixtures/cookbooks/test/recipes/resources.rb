@@ -9,8 +9,10 @@ d = directory '/data'
 crio_container 'redis' do
   image img.repo
   tag img.tag
-  run_opts ["--volume=#{d.path}:#{d.path}",
-           '--net=host', "--workdir=#{d.path}"]
   supervise true
+  run_opts ["--volume=#{d.path}:#{d.path}", '--net=host',
+            "--workdir=#{d.path}", '--log-driver=json-file',
+            '--log-opt=path=/var/log/redis.log']
   action [:create, :enable, :start]
+  notifies :restart, to_s, :delayed
 end

@@ -7,6 +7,7 @@ long_description 'Installs/Configures crio'
 version '0.1.0'
 chef_version '>= 12.1' if respond_to?(:chef_version)
 
-issues_url 'https://github.com/nathwill/chef-crio/issues'
+supports 'centos', '>= 7'
 
+issues_url 'https://github.com/nathwill/chef-crio/issues'
 source_url 'https://github.com/nathwill/chef-crio'

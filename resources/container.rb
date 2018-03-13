@@ -4,17 +4,17 @@ property :tag, String, default: 'latest'
 property :run_opts, Array, default: []
 property :pull_opts, Array, default: []
 property :command, String
-property :supervise, [TrueClass, FalseClass], default: false
+property :supervise, [TrueClass, FalseClass], default: true
 
 default_action :run
 
-def load_current_resource
-  
-end
+#def load_current_resource
+#
+#end
 
-action_class do
-
-end
+#action_class do
+#
+#end
 
 action :create do
   systemd_unit "#{new_resource.crio_container}.service" do
@@ -93,6 +93,11 @@ action :stop do
     not_if { new_resource.supervise }
 #    only_if { running? }
   end
+end
+
+action :restart do
+  action_stop
+  action_start
 end
 
 action :run do
