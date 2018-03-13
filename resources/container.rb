@@ -1,8 +1,8 @@
-property :crio_container, String, identity: true
+property :crio_container, String, name_property: true
 property :image, String, required: true
 property :tag, String, default: 'latest'
-property :run_opts, Array, default: ['--rm']
-property :pull_opts, Array, default: ['--tls-verify']
+property :run_opts, Array, default: []
+property :pull_opts, Array, default: []
 property :command, String
 property :supervise, [TrueClass, FalseClass], default: false
 
@@ -17,7 +17,7 @@ action_class do
 end
 
 action :create do
-  systemd_unit new_resource.crio_container do
+  systemd_unit "#{new_resource.crio_container}.service" do
     content <<~EOT
       [Unit]
       Description=crio container: %p
@@ -56,7 +56,7 @@ action :create do
       new_resource.command
     ].join(' ')
     not_if { new_resource.supervise }
-    only_if { !exists? }
+#    only_if { !exists? }
   end
 end
 
@@ -71,14 +71,14 @@ end
 
 action :start do
   systemd_unit new_resource.crio_container do
-    action :stop
+    action :start
     only_if { new_resource.supervise }
   end
 
   execute "start crio container: #{new_resource.crio_container}" do
     command "/bin/podman start #{new_resource.crio_container}"
     not_if { new_resource.supervise }
-    only_if { !running? }
+#    only_if { !running? }
   end
 end
 
@@ -91,7 +91,7 @@ action :stop do
   execute "stop crio container: #{new_resource.crio_container}" do
     command "/bin/podman stop #{new_resource.crio_container}"
     not_if { new_resource.supervise }
-    only_if { running? }
+#    only_if { running? }
   end
 end
 
@@ -103,15 +103,14 @@ action :run do
       new_resource.image + ':' + new_resource.tag,
       new_resource.command
     ].join(' ')
-    only_if { !running? }
-    not_if { new_resource.supervise }
+#    only_if { !running? }
   end
 end
 
 action :rm do
   execute "rm crio container: #{new_resource.crio_container}" do
     command "/bin/podman rm #{new_resource.crio_container}"
-    only_if { exists? }
+#    only_if { exists? }
   end
 end
 
@@ -128,14 +127,14 @@ end
 action :pause do
   execute "pause crio container: #{new_resource.crio_container}" do
     command "/bin/podman pause #{new_resource.crio_container}"
-    only_if { !paused? }
+#    only_if { !paused? }
   end
 end
 
 action :unpause do
   execute "unpause crio container: #{new_resource.crio_container}" do
     command "/bin/podman unpause #{new_resource.crio_container}"
-    only_if { paused? }
+#    only_if { paused? }
   end
 end
 

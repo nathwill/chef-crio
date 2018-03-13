@@ -1,4 +1,4 @@
-property :crio_image, String, identity: true
+property :crio_image, String, name_property: true
 property :repo, String
 property :tag, String, default: 'latest'
 property :source, String
