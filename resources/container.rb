@@ -30,7 +30,8 @@ action :create do
         #{new_resource.image}:#{new_resource.tag}
       ExecStartPre=/bin/podman run \\
         #{new_resource.run_opts.join(' ')} \\
-        --detach --name=%p \\
+        --cgroup-parent=/machine.slice/%p.service \\
+        --detach --name=%p --cidfile=/var/run/%p.crio \\
         #{new_resource.image}:#{new_resource.tag} #{new_resource.command}
       ExecStart=/bin/podman wait %p
       ExecStop=/bin/podman pull \\
@@ -39,6 +40,7 @@ action :create do
       ExecStop=-/bin/podman stop %p
       ExecStop=-/bin/podman rm %p
       Restart=always
+      Slice=machine.slice
 
       [Install]
       WantedBy=multi-user.target
