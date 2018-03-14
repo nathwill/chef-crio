@@ -18,6 +18,8 @@ suites:
       - recipe[test::resources]
     attributes:
       crio:
+        network:
+          - --enable-metrics
         conf:
           root: /var/lib/containers/storage
           runroot: /var/run/containers/storage
@@ -26,7 +28,7 @@ suites:
             - overlay.override_kernel_check=1
           api:
             listen: /var/run/crio/crio.sock
-            stream_port: 10010
+            stream_port: '10010'
             file_locking: true
           runtime:
             runtime: /usr/bin/runc

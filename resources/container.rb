@@ -5,44 +5,42 @@ property :run_opts, Array, default: []
 property :pull_opts, Array, default: []
 property :command, String
 
-default_action :run
+action_class do
+  def img_desc
+    new_resource.image + ':' + new_resource.tag
+  end
 
-action :create do
-  systemd_unit "#{new_resource.crio_container}.service" do
-    content <<~EOT
-      [Unit]
-      Description=crio container: %p
-
-      [Service]
-      ExecStartPre=-/bin/podman stop %p
-      ExecStartPre=-/bin/podman rm %p
-      ExecStartPre=/bin/podman pull \\
-        #{new_resource.pull_opts.join(' ')} \\
-        #{new_resource.image}:#{new_resource.tag}
-      ExecStartPre=/bin/podman run \\
-        #{new_resource.run_opts.join(' ')} \\
-        --cgroup-parent=/machine.slice/%p.service \\
-        --detach --name=%p --cidfile=/var/run/%p.crio \\
-        #{new_resource.image}:#{new_resource.tag} #{new_resource.command}
-      ExecStart=/bin/podman wait %p
-      ExecStop=/bin/podman pull \\
-        #{new_resource.pull_opts.join(' ')} \\
-        #{new_resource.image}:#{new_resource.tag}
-      ExecStop=-/bin/podman stop %p
-      ExecStop=-/bin/podman rm %p
-      Restart=always
-      Slice=machine.slice
-
-      [Install]
-      WantedBy=multi-user.target
-    EOT
-    action :create
+  def fmt_opts(arr = [])
+    arr.join(' ')
   end
 end
 
-%i(delete enable disable start stop restart).each do |actn|
+default_action :run
+
+%i(create delete enable disable start stop restart try_restart).each do |actn|
   action actn do
-    systemd_unit new_resource.crio_container do
+    systemd_unit "#{new_resource.crio_container}.service" do
+      content <<~EOT
+        [Unit]
+        Description=crio container: %p
+
+        [Service]
+        ExecStartPre=-/bin/podman stop %p
+        ExecStartPre=-/bin/podman rm %p
+        ExecStartPre=/bin/podman pull #{fmt_opts new_resource.pull_opts} #{img_desc}
+        ExecStartPre=/bin/podman run #{fmt_opts new_resource.run_opts} \\
+            --cgroup-parent=/machine.slice/%p.service --detach --name=%p \\
+            --cidfile=/var/run/%p.crio #{img_desc} #{new_resource.command}
+        ExecStart=/bin/podman wait %p
+        ExecStop=/bin/podman pull #{fmt_opts new_resource.pull_opts} #{img_desc}
+        ExecStop=-/bin/podman stop %p
+        ExecStop=-/bin/podman rm %p
+        Restart=always
+        Slice=machine.slice
+
+        [Install]
+        WantedBy=multi-user.target
+      EOT
       action actn
     end
   end
