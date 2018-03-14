@@ -9,5 +9,7 @@ chef_version '>= 12.1' if respond_to?(:chef_version)
 
 supports 'centos', '>= 7.0'
 
-issues_url 'https://github.com/nathwill/chef-crio/issues'
+gem 'toml' if respond_to?(:gem)
+
 source_url 'https://github.com/nathwill/chef-crio'
+issues_url 'https://github.com/nathwill/chef-crio/issues'

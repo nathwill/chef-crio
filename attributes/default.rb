@@ -7,3 +7,4 @@
 
 default['crio']['storage'] = []
 default['crio']['network'] = []
+default['crio']['conf'] = {}
