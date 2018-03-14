@@ -32,9 +32,8 @@ default_action :run
             --cgroup-parent=/machine.slice/%p.service --detach --name=%p \\
             --cidfile=/var/run/%p.crio #{img_desc} #{new_resource.command}
         ExecStart=/bin/podman wait %p
-        ExecStop=/bin/podman pull #{fmt_opts new_resource.pull_opts} #{img_desc}
-        ExecStop=-/bin/podman stop %p
-        ExecStop=-/bin/podman rm %p
+        ExecStop=/bin/podman stop %p
+        ExecStop=/bin/podman rm %p
         Restart=always
         Slice=machine.slice
 
