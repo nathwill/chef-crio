@@ -1,6 +1,6 @@
 # crio
 
-Chef cookbook for managing [cri-o](https://cri-o.io) and related resources.
+Chef cookbook for managing [cri-o](http://cri-o.io) and related resources.
 
 ## Recipes
 
