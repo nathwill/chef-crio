@@ -43,7 +43,6 @@ end
 %i(delete enable disable start stop restart).each do |actn|
   action actn do
     systemd_unit new_resource.crio_container do
-      only_if { new_resource.supervise }
       action actn
     end
   end
