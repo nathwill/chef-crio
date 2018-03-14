@@ -31,4 +31,8 @@ control 'runs container' do
   describe file('/data/dump.rdb') do
     it { should be_file }
   end
+
+  describe command('netstat -lptn') do
+    its('stdout') { should match ':::6379' }
+  end
 end
