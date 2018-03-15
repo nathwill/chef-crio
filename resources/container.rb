@@ -3,6 +3,7 @@ property :image, String, default: lazy { container_name }
 property :tag, String, default: 'latest'
 property :run_opts, Array, default: []
 property :pull_opts, Array, default: []
+property :pull_image, [TrueClass, FalseClass], default: true
 property :command, String
 
 action_class do
@@ -17,7 +18,7 @@ end
 
 default_action :create
 
-%i(create delete enable disable start stop restart try_restart).each do |actn|
+%i(create delete).each do |actn|
   action actn do
     systemd_unit "#{new_resource.container_name}.service" do
       content <<~EOT
@@ -27,7 +28,6 @@ default_action :create
         [Service]
         ExecStartPre=-/bin/podman stop %p
         ExecStartPre=-/bin/podman rm %p
-        ExecStartPre=/bin/podman pull #{fmt_opts new_resource.pull_opts} #{img_desc}
         ExecStart=/bin/podman run #{fmt_opts new_resource.run_opts} \\
             --cidfile=/var/run/%p.crio --cgroup-parent=/machine.slice/%p.service \\
             --name=%p #{img_desc} #{new_resource.command}
@@ -39,6 +39,26 @@ default_action :create
         [Install]
         WantedBy=multi-user.target
       EOT
+      action actn
+    end
+
+    dir = directory "/etc/systemd/system/#{new_resource.container_name}.service.d" do
+      only_if { new_resource.pull_image }
+    end
+
+    file ::File.join(dir.path, 'default.conf') do
+      content <<~EOT
+        [Service]
+        ExecStartPre=/bin/podman pull #{fmt_opts new_resource.pull_opts} #{img_desc}
+      EOT
+      only_if { new_resource.pull_image }
+    end
+  end
+end
+
+%i(enable disable start stop restart try_restart).each do |actn|
+  action actn do
+    systemd_unit "#{new_resource.container_name}.service" do
       action actn
     end
   end

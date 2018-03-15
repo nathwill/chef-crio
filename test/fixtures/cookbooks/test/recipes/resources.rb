@@ -1,4 +1,6 @@
-crio_image 'nginx'
+crio_image 'nginx' do
+  action :pull_if_missing
+end
 
 img = crio_image 'redis' do
   repo 'docker.io/library/redis'

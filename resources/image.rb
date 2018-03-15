@@ -16,3 +16,10 @@ action :pull do
     command "/bin/podman pull #{new_resource.pull_opts.join(' ')} #{img_desc}"
   end
 end
+
+action :pull_if_missing do
+  execute "pull crio image: #{new_resource.image_name}" do
+    command "/bin/podman pull #{new_resource.pull_opts.join(' ')} #{img_desc}"
+    not_if "podman images --format '{{.Repository}}:{{.Tag}}' | grep -q '#{img_desc}'"
+  end
+end
