@@ -1,35 +1,35 @@
-# crio
+# crio chef cookbook
 
-Chef cookbook for managing [cri-o](http://cri-o.io) and related resources.
+Chef cookbook for managing [CRI-O](http://cri-o.io) and related resources.
 
 Recommended reading:
-  - [cri-o man page](https://www.mankier.com/8/crio)
+  - [crio man page](https://www.mankier.com/8/crio)
   - [podman man page](https://www.mankier.com/1/podman)
-  - [cri-o blog](https://medium.com/cri-o)
+  - [CRI-O blog](https://medium.com/cri-o)
 
 ## Recipes
 
 ### crio::default
 
-Runs install, configure manage tasks
+includes install, configure, manage recipes
 
 ### crio::install
 
-sets up yum repository and install crio packages
+sets up yum repository and install CRI-O related packages
 
 ### crio::configure
 
-configures the crio daemon through the env-files using attributes
+configures the CRI-O daemon through the env-files using attributes
 
 ### crio::manage
 
-manages the crio daemon service
+manages crio.service
 
 ## Resources
 
 ### crio\_image
 
-resource for managing crio images
+resource for managing CRI-O images
 
 |property|type|
 |--------|----|
@@ -40,7 +40,7 @@ resource for managing crio images
 
 ### crio\_container
 
-resource for managing crio containers as system services
+resource for managing CRI-O containers as system services
 
 |property|type|
 |--------|----|

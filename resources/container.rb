@@ -22,7 +22,7 @@ default_action :create
     systemd_unit "#{new_resource.container_name}.service" do
       content <<~EOT
         [Unit]
-        Description=crio container: %p
+        Description=CRI-O container: %p
 
         [Service]
         ExecStartPre=-/bin/podman stop %p
