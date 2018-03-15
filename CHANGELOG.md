@@ -1,3 +1,7 @@
+# 0.7.0 / 2018-03-15
+
+* fix default container resource action
+
 # 0.6.0 / 2018-03-15
 
 * set default image/container repo properties rather than required
