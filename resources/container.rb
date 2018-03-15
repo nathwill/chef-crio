@@ -15,7 +15,7 @@ action_class do
   end
 end
 
-default_action :run
+default_action :create
 
 %i(create delete enable disable start stop restart try_restart).each do |actn|
   action actn do
