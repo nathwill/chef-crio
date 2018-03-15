@@ -19,7 +19,7 @@ sets up yum repository and install CRI-O related packages
 
 ### crio::configure
 
-configures the CRI-O daemon through the env-files using attributes
+configures the CRI-O daemon via attributes
 
 ### crio::manage
 
