@@ -1,5 +1,5 @@
 property :container_name, String, identity: true, name_property: true
-property :image, String, required: true
+property :image, String, default: lazy { container_name }
 property :tag, String, default: 'latest'
 property :run_opts, Array, default: []
 property :pull_opts, Array, default: []

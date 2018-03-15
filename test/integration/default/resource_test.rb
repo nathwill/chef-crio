@@ -1,5 +1,6 @@
 control 'pulls image' do
   describe command('podman images') do
+    its('stdout') { should match 'docker.io/library/nginx' }
     its('stdout') { should match 'docker.io/library/redis' }
   end
 end

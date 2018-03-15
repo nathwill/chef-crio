@@ -1,3 +1,4 @@
+crio_image 'nginx'
 
 img = crio_image 'redis' do
   repo 'docker.io/library/redis'

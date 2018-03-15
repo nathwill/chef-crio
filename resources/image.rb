@@ -1,5 +1,5 @@
 property :image_name, String, name_property: true
-property :repo, String, required: true
+property :repo, String, default: lazy { image_name }
 property :tag, String, default: 'latest'
 property :pull_opts, Array, default: []
 
