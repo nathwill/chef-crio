@@ -1,7 +1,7 @@
 property :image_name, String, name_property: true
-property :repo, String
+property :repo, String, required: true
 property :tag, String, default: 'latest'
-property :opts, Array, default: []
+property :pull_opts, Array, default: []
 
 default_action :pull
 
@@ -13,6 +13,6 @@ end
 
 action :pull do
   execute "pull crio image: #{new_resource.image_name}" do
-    command "/bin/podman pull #{new_resource.opts.join(' ')} #{img_desc}"
+    command "/bin/podman pull #{new_resource.pull_opts.join(' ')} #{img_desc}"
   end
 end
