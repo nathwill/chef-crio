@@ -1,4 +1,4 @@
-property :crio_container, String, name_property: true
+property :container_name, String, identity: true, name_property: true
 property :image, String, required: true
 property :tag, String, default: 'latest'
 property :run_opts, Array, default: []
@@ -19,7 +19,7 @@ default_action :run
 
 %i(create delete enable disable start stop restart try_restart).each do |actn|
   action actn do
-    systemd_unit "#{new_resource.crio_container}.service" do
+    systemd_unit "#{new_resource.container_name}.service" do
       content <<~EOT
         [Unit]
         Description=crio container: %p

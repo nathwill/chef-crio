@@ -20,7 +20,7 @@ file '/etc/sysconfig/crio-network' do
 end
 
 file '/etc/crio/crio.conf' do
-  content({crio: cfg['conf']}.to_toml)
+  content({ crio: cfg['conf'] }.to_toml)
   mode '0640'
   not_if { cfg['conf'].empty? }
 end
