@@ -28,10 +28,9 @@ default_action :run
         ExecStartPre=-/bin/podman stop %p
         ExecStartPre=-/bin/podman rm %p
         ExecStartPre=/bin/podman pull #{fmt_opts new_resource.pull_opts} #{img_desc}
-        ExecStartPre=/bin/podman run #{fmt_opts new_resource.run_opts} \\
-            --cgroup-parent=/machine.slice/%p.service --detach --name=%p \\
-            --cidfile=/var/run/%p.crio #{img_desc} #{new_resource.command}
-        ExecStart=/bin/podman wait %p
+        ExecStart=/bin/podman run #{fmt_opts new_resource.run_opts} \\
+            --cidfile=/var/run/%p.crio --cgroup-parent=/machine.slice/%p.service \\
+            --name=%p #{img_desc} #{new_resource.command}
         ExecStop=/bin/podman stop %p
         ExecStop=/bin/podman rm %p
         Restart=always
