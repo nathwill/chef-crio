@@ -1,3 +1,8 @@
+# 1.0.0 / 2018-03-15
+
+* add pull_if_missing action to image resource
+* allow opt out of image pull in container resource using pull_image property
+
 # 0.7.0 / 2018-03-15
 
 * fix default container resource action

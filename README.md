@@ -50,4 +50,4 @@ resource for managing CRI-O containers as system services
 |run_opts|Array|
 |pull_opts|Array|
 |command|String|
-
+|pull_image|[TrueClass, FalseClass]|
