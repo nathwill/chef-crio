@@ -1,3 +1,11 @@
+# 1.0.1 / 2018-03-15
+
+* add travis config
+* add identity to image_name
+* clarify test functionality
+* update documentation
+* add travis config
+
 # 1.0.0 / 2018-03-15
 
 * add pull_if_missing action to image resource
