@@ -42,9 +42,9 @@ resource for managing CRI-O images
 
 #### actions
 
-`:pull`: default, pulls image
-`:pull_if_missing`: pull image if not already present
-`:nothing`: do nothing
+ - `:pull`: default, pulls image
+ - `:pull_if_missing`: pull image if not already present
+ - `:nothing`: do nothing
 
 ### crio\_container
 
@@ -64,12 +64,12 @@ resource for managing CRI-O containers as systemd service units
 
 #### actions
 
-`:create`: default, create systemd unit to run container as a systemd service unit
-`:delete`: delete container service unit
-`:enable`: enable container service unit
-`:disable`: disable container service unit
-`:start`: start service unit
-`:stop`: stop service unit
-`:restart`: restart service unit, start if stopped
-`:try_restart`: restart service unit if running, does nothing if stopped
-`:nothing`: do... nothing!
+ - `:create`: default, create systemd unit to run container as a systemd service unit
+ - `:delete`: delete container service unit
+ - `:enable`: enable container service unit
+ - `:disable`: disable container service unit
+ - `:start`: start service unit
+ - `:stop`: stop service unit
+ - `:restart`: restart service unit, start if stopped
+ - `:try_restart`: restart service unit if running, does nothing if stopped
+ - `:nothing`: do... nothing!
