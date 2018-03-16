@@ -55,7 +55,7 @@ resource for managing CRI-O containers as systemd service units
 |property|type|example|description|
 |--------|----|-------|-----------|
 |container_name|String|`redis`|resource name|
-|image|String|`redis`|local image to run|
+|image|String|`redis`|image to run|
 |tag|String|`3.2`|image tag to run|
 |run_opts|Array|`['--net=host']`|podman run options|
 |pull_opts|Array|`['--authfile=/etc/containers/auth.json']`|podman pull options|
