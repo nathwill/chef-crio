@@ -1,4 +1,4 @@
-# crio chef cookbook
+# crio chef cookbook [![Build Status](https://travis-ci.org/nathwill/chef-crio.svg?branch=master)](https://travis-ci.org/nathwill/chef-crio)
 
 Chef cookbook for managing [CRI-O](http://cri-o.io) and related resources.
 
