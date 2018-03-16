@@ -46,7 +46,7 @@ default_action :create
       only_if { new_resource.pull_image }
     end
 
-    file ::File.join(dir.path, 'default.conf') do
+    file ::File.join(dir.path, 'pull.conf') do
       content <<~EOT
         [Service]
         ExecStartPre=/bin/podman pull #{fmt_opts new_resource.pull_opts} #{img_desc}
