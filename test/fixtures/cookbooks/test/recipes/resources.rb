@@ -21,3 +21,5 @@ crio_container app_name do
             '--log-driver=json-file', "--log-opt=path=#{log_file.path}"]
   action [:create, :enable, :start]
 end
+
+execute "podman exec #{app_name} redis-cli bgsave"
