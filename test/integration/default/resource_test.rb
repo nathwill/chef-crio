@@ -8,7 +8,7 @@ end
 
 control 'runs container' do
   # running under podman
-  describe command('podman ps') do
+  describe command('podman ps --format="{{.Names}}"') do
     its('stdout') { should match 'redis' }
   end
 
@@ -56,6 +56,5 @@ control 'runs container' do
   describe command('systemd-cgls /machine.slice/redis.service') do
     its('stdout') { should match 'redis-server' }
     its('stdout') { should match 'conmon' }
-    its('stdout') { should match 'podman run' }
   end
 end

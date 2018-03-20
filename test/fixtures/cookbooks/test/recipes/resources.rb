@@ -21,3 +21,13 @@ crio_container app_name do
             '--log-driver=json-file', "--log-opt=path=#{log_file.path}"]
   action [:create, :enable, :start]
 end
+
+#
+# interact with redis
+#
+
+include_recipe 'yum-epel'
+
+package 'redis'
+
+execute 'redis-cli bgsave'
