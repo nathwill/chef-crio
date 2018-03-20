@@ -15,7 +15,7 @@ control 'runs container' do
   # defined system service
   describe file('/etc/systemd/system/redis.service') do
     # runs under podman
-    its('content') { should match 'podman run' }
+    its('content') { should match 'podman  run' }
     # configures run opts
     its('content') { should match '--net=host --workdir=/data' }
     # specifies image
@@ -23,7 +23,7 @@ control 'runs container' do
   end
 
   describe file('/etc/systemd/system/redis.service.d/pull.conf') do
-    its('content') { should match 'podman pull' }
+    its('content') { should match 'podman  pull' }
   end
 
   # functional

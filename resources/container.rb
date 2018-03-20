@@ -3,6 +3,7 @@ property :image, String, default: lazy { container_name }
 property :tag, String, default: 'latest'
 property :run_opts, Array, default: []
 property :pull_opts, Array, default: []
+property :global_opts, Array, default: []
 property :pull_image, [TrueClass, FalseClass], default: true
 property :command, String
 
@@ -13,6 +14,10 @@ action_class do
 
   def fmt_opts(arr = [])
     arr.join(' ')
+  end
+
+  def podman_cmd
+    "/bin/podman #{fmt_opts new_resource.global_opts}"
   end
 end
 
@@ -27,13 +32,13 @@ default_action :create
 
         [Service]
         Type=forking
-        ExecStartPre=-/bin/podman stop %p
-        ExecStartPre=-/bin/podman rm %p
-        ExecStart=/bin/podman run --detach #{fmt_opts new_resource.run_opts} \\
+        ExecStartPre=-#{podman_cmd} stop %p
+        ExecStartPre=-#{podman_cmd} rm %p
+        ExecStart=#{podman_cmd} run --detach #{fmt_opts new_resource.run_opts} \\
             --cidfile=/var/run/%p.crio --cgroup-parent=/machine.slice/%p.service \\
             --name=%p #{img_desc} #{new_resource.command}
-        ExecStop=/bin/podman stop %p
-        ExecStop=/bin/podman rm %p
+        ExecStop=#{podman_cmd} stop %p
+        ExecStop=#{podman_cmd} rm %p
         Restart=always
         Slice=machine.slice
 
@@ -50,7 +55,7 @@ default_action :create
     file ::File.join(dir.path, 'pull.conf') do
       content <<~EOT
         [Service]
-        ExecStartPre=/bin/podman pull #{fmt_opts new_resource.pull_opts} #{img_desc}
+        ExecStartPre=#{podman_cmd} pull #{fmt_opts new_resource.pull_opts} #{img_desc}
       EOT
       only_if { new_resource.pull_image }
     end
