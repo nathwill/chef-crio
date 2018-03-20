@@ -17,7 +17,7 @@ control 'runs container' do
     # runs under podman
     its('content') { should match 'podman  run' }
     # configures run opts
-    its('content') { should match '--net=host --workdir=/data' }
+    its('content') { should match '--net=host' }
     # specifies image
     its('content') { should match 'redis:3.2' }
   end

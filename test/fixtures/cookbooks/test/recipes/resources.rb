@@ -16,8 +16,7 @@ data_dir = directory '/data'
 crio_container app_name do
   image app_name
   tag '3.2'
-  run_opts ['--net=host', "--workdir=#{data_dir.path}",
-            "--volume=#{data_dir.path}:#{data_dir.path}",
+  run_opts ['--net=host', "--volume=#{data_dir.path}:#{data_dir.path}",
             '--log-driver=json-file', "--log-opt=path=#{log_file.path}"]
   action [:create, :enable, :start]
 end
