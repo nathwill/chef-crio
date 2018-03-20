@@ -1,3 +1,9 @@
+# 1.1.0 / 2018-03-20
+
+* add global_opts property for image/container resources
+* detach podman run, use forking service type
+* fix up tests
+
 # 1.0.1 / 2018-03-15
 
 * add travis config

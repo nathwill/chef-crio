@@ -38,6 +38,7 @@ resource for managing CRI-O images
 |image_name|String|`redis`|resource name|
 |repo|String|`docker.io/library/redis`|image repository path|
 |tag|String|`latest`|image tag to pull|
+|global_opts|Array|`['--storage-driver=vfs']`|podman global options|
 |pull_opts|Array|`--authfile=/etc/containers/auth.json`|podman pull options|
 
 #### actions
@@ -57,6 +58,7 @@ resource for managing CRI-O containers as systemd service units
 |container_name|String|`redis`|resource name|
 |image|String|`redis`|image to run|
 |tag|String|`3.2`|image tag to run|
+|global_opts|Array|`['--storage-driver=vfs']`|podman global options|
 |run_opts|Array|`['--net=host']`|podman run options|
 |pull_opts|Array|`['--authfile=/etc/containers/auth.json']`|podman pull options|
 |command|String|`/usr/bin/my-app`|command to run in container|
