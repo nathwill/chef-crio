@@ -26,9 +26,10 @@ default_action :create
         Description=CRI-O container: %p
 
         [Service]
+        Type=forking
         ExecStartPre=-/bin/podman stop %p
         ExecStartPre=-/bin/podman rm %p
-        ExecStart=/bin/podman run #{fmt_opts new_resource.run_opts} \\
+        ExecStart=/bin/podman run --detach #{fmt_opts new_resource.run_opts} \\
             --cidfile=/var/run/%p.crio --cgroup-parent=/machine.slice/%p.service \\
             --name=%p #{img_desc} #{new_resource.command}
         ExecStop=/bin/podman stop %p
