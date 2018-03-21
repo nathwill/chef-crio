@@ -1,3 +1,7 @@
+# 1.1.1 / 2018-03-21
+
+* make pull action on image resource idempotent
+
 # 1.1.0 / 2018-03-20
 
 * add global_opts property for image/container resources
