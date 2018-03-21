@@ -7,7 +7,11 @@ property :pull_opts, Array, default: []
 default_action :pull
 
 action_class do
-  def img_desc
+  require 'chef/mixin/shell_out'
+
+  include Chef::Mixin::ShellOut
+
+  def img_ref
     "#{new_resource.repo}:#{new_resource.tag}"
   end
 
@@ -16,19 +20,33 @@ action_class do
   end
 
   def podman_cmd
-    "/bin/podman #{fmt_opts new_resource.global_opts}"
+    "podman #{fmt_opts new_resource.global_opts}"
+  end
+
+  def img_refs
+    cmd = shell_out_with_systems_locale!("#{podman_cmd} images --format '{{.Repository}}:{{.Tag}}'")
+    cmd.stdout.split("\n")
+  end
+
+  def img_shas
+    cmd = shell_out_with_systems_locale!("#{podman_cmd} images -q --no-trunc")
+    cmd.stdout.split("\n")
+  end
+
+  def pull_img
+    extant = img_shas
+    cmd = shell_out_with_systems_locale!("#{podman_cmd} pull -q #{fmt_opts new_resource.pull_opts} #{img_ref}")
+    !extant.any? { |img_sha| img_sha.end_with?(cmd.stdout.chomp) }
   end
 end
 
 action :pull do
-  execute "pull crio image: #{new_resource.image_name}" do
-    command "#{podman_cmd} pull #{fmt_opts new_resource.pull_opts} #{img_desc}"
-  end
+  # We always pull, this reports a change
+  converge_by "Pulling image: #{img_ref}" do
+  end if pull_img
 end
 
 action :pull_if_missing do
-  execute "pull crio image: #{new_resource.image_name}" do
-    command "#{podman_cmd} pull #{new_resource.pull_opts.join(' ')} #{img_desc}"
-    not_if "#{podman_cmd} images --format '{{.Repository}}:{{.Tag}}' | grep -q '#{img_desc}'"
-  end
+  return if img_refs.include?(img_ref)
+  action_pull
 end

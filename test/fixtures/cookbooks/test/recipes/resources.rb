@@ -1,7 +1,13 @@
 #
 # test image resource
 #
-crio_image 'nginx' do
+crio_image 'busybox' do
+  tag 'musl'
+end
+
+crio_image 'busybox-second' do
+  repo 'busybox'
+  tag 'musl'
   action :pull_if_missing
 end
 
@@ -29,4 +35,7 @@ include_recipe 'yum-epel'
 
 package 'redis'
 
-execute 'redis-cli bgsave'
+# force bgsave so we can test the vol-mount
+execute 'redis-cli bgsave' do
+  not_if { ::File.exist?('/data/dump.rdb') }
+end

@@ -8,7 +8,7 @@ property :pull_image, [TrueClass, FalseClass], default: true
 property :command, String
 
 action_class do
-  def img_desc
+  def img_ref
     new_resource.image + ':' + new_resource.tag
   end
 
@@ -36,7 +36,7 @@ default_action :create
         ExecStartPre=-#{podman_cmd} rm %p
         ExecStart=#{podman_cmd} run --detach #{fmt_opts new_resource.run_opts} \\
             --cidfile=/var/run/%p.crio --cgroup-parent=/machine.slice/%p.service \\
-            --name=%p #{img_desc} #{new_resource.command}
+            --name=%p #{img_ref} #{new_resource.command}
         ExecStop=#{podman_cmd} stop %p
         ExecStop=#{podman_cmd} rm %p
         Restart=always
@@ -55,7 +55,7 @@ default_action :create
     file ::File.join(dir.path, 'pull.conf') do
       content <<~EOT
         [Service]
-        ExecStartPre=#{podman_cmd} pull #{fmt_opts new_resource.pull_opts} #{img_desc}
+        ExecStartPre=#{podman_cmd} pull #{fmt_opts new_resource.pull_opts} #{img_ref}
       EOT
       only_if { new_resource.pull_image }
     end

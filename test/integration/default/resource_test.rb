@@ -1,7 +1,7 @@
 control 'pulls image' do
   # image download
   describe command('podman images') do
-    its('stdout') { should match 'docker.io/library/nginx' }
+    its('stdout') { should match 'docker.io/library/busybox' }
     its('stdout') { should match 'docker.io/library/redis' }
   end
 end
