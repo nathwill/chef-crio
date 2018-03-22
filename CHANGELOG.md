@@ -1,3 +1,8 @@
+# 1.2.0 / 2018-03-22
+
+* consolidate common resource methods
+* pull_image defaults to false on container resource
+
 # 1.1.1 / 2018-03-21
 
 * make pull action on image resource idempotent
