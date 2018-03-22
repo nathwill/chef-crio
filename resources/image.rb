@@ -6,22 +6,13 @@ property :pull_opts, Array, default: []
 
 default_action :pull
 
+alias_method :image, :repo
+
 action_class do
   require 'chef/mixin/shell_out'
 
   include Chef::Mixin::ShellOut
-
-  def img_ref
-    "#{new_resource.repo}:#{new_resource.tag}"
-  end
-
-  def fmt_opts(arr = [])
-    arr.join(' ')
-  end
-
-  def podman_cmd
-    "podman #{fmt_opts new_resource.global_opts}"
-  end
+  include CrioCookbook::Mixins::ResourceMethods
 
   def img_refs
     cmd = shell_out_with_systems_locale!("#{podman_cmd} images --format '{{.Repository}}:{{.Tag}}'")

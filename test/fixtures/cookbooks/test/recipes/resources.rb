@@ -24,6 +24,7 @@ crio_container app_name do
   tag '3.2'
   run_opts ['--net=host', "--volume=#{data_dir.path}:#{data_dir.path}",
             '--log-driver=json-file', "--log-opt=path=#{log_file.path}"]
+  pull_image true
   action [:create, :enable, :start]
 end
 

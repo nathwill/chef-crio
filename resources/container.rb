@@ -4,21 +4,13 @@ property :tag, String, default: 'latest'
 property :run_opts, Array, default: []
 property :pull_opts, Array, default: []
 property :global_opts, Array, default: []
-property :pull_image, [TrueClass, FalseClass], default: true
+property :pull_image, [TrueClass, FalseClass], default: false
 property :command, String
 
+alias_method :repo, :image
+
 action_class do
-  def img_ref
-    new_resource.image + ':' + new_resource.tag
-  end
-
-  def fmt_opts(arr = [])
-    arr.join(' ')
-  end
-
-  def podman_cmd
-    "/bin/podman #{fmt_opts new_resource.global_opts}"
-  end
+  include CrioCookbook::Mixins::ResourceMethods
 end
 
 default_action :create
@@ -40,6 +32,7 @@ default_action :create
         ExecStop=#{podman_cmd} stop %p
         ExecStop=#{podman_cmd} rm %p
         Restart=always
+        Delegate=yes
         Slice=machine.slice
 
         [Install]
@@ -49,7 +42,11 @@ default_action :create
     end
 
     dir = directory "/etc/systemd/system/#{new_resource.container_name}.service.d" do
-      only_if { new_resource.pull_image }
+      only_if { new_resource.pull_image && actn == :create }
+    end
+
+    reload = execute 'systemctl daemon-reload' do
+      action :nothing
     end
 
     file ::File.join(dir.path, 'pull.conf') do
@@ -57,7 +54,13 @@ default_action :create
         [Service]
         ExecStartPre=#{podman_cmd} pull #{fmt_opts new_resource.pull_opts} #{img_ref}
       EOT
-      only_if { new_resource.pull_image }
+      notifies :run, reload.to_s, :immediately
+      # Delete if action is create, but pull_image is false
+      if actn == :create && new_resource.pull_image
+        action :create
+      else
+        action :delete
+      end
     end
   end
 end
