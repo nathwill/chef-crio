@@ -1,3 +1,7 @@
+# 1.2.1 / 2018-03-22
+
+* coerce opts to string
+
 # 1.2.0 / 2018-03-22
 
 * consolidate common resource methods
