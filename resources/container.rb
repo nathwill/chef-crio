@@ -1,9 +1,9 @@
 property :container_name, String, identity: true, name_property: true
 property :image, String, default: lazy { container_name }
 property :tag, String, default: 'latest'
-property :run_opts, Array, default: []
-property :pull_opts, Array, default: []
-property :global_opts, Array, default: []
+property :run_opts, [String, Array], default: [], coerce: CrioCookbook::FMT_OPT_PROC
+property :pull_opts, [String, Array], default: [], coerce: CrioCookbook::FMT_OPT_PROC
+property :global_opts, [String, Array], default: [], coerce: CrioCookbook::FMT_OPT_PROC
 property :pull_image, [TrueClass, FalseClass], default: false
 property :command, String
 
@@ -26,7 +26,7 @@ default_action :create
         Type=forking
         ExecStartPre=-#{podman_cmd} stop %p
         ExecStartPre=-#{podman_cmd} rm %p
-        ExecStart=#{podman_cmd} run --detach #{fmt_opts new_resource.run_opts} \\
+        ExecStart=#{podman_cmd} run --detach #{new_resource.run_opts} \\
             --cidfile=/var/run/%p.crio --cgroup-parent=/machine.slice/%p.service \\
             --name=%p #{img_ref} #{new_resource.command}
         ExecStop=#{podman_cmd} stop %p
@@ -52,7 +52,7 @@ default_action :create
     file ::File.join(dir.path, 'pull.conf') do
       content <<~EOT
         [Service]
-        ExecStartPre=#{podman_cmd} pull #{fmt_opts new_resource.pull_opts} #{img_ref}
+        ExecStartPre=#{podman_cmd} pull #{new_resource.pull_opts} #{img_ref}
       EOT
       notifies :run, reload.to_s, :immediately
       # Delete if action is create, but pull_image is false

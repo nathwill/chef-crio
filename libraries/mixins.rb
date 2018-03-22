@@ -6,6 +6,8 @@
 #
 
 module CrioCookbook
+  FMT_OPT_PROC = proc { |v| v.is_a?(Array) ? v.join(' ') : v }
+
   module Mixins
     module ResourceMethods
       def self.included(base)
@@ -16,8 +18,7 @@ module CrioCookbook
       module ClassMethods
         def def_methods
           define_method(:img_ref) { "#{new_resource.repo}:#{new_resource.tag}" }
-          define_method(:podman_cmd) { "/bin/podman #{fmt_opts new_resource.global_opts}" }
-          define_method(:fmt_opts) { |arr = []| arr.join(' ') }
+          define_method(:podman_cmd) { "/bin/podman #{new_resource.global_opts}" }
         end
       end
     end

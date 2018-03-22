@@ -1,8 +1,8 @@
 property :image_name, String, identity: true, name_property: true
 property :repo, String, default: lazy { image_name }
 property :tag, String, default: 'latest'
-property :global_opts, Array, default: []
-property :pull_opts, Array, default: []
+property :global_opts, [String, Array], default: [], coerce: CrioCookbook::FMT_OPT_PROC
+property :pull_opts, [String, Array], default: [], coerce: CrioCookbook::FMT_OPT_PROC
 
 default_action :pull
 
@@ -26,7 +26,7 @@ action_class do
 
   def pull_img
     extant = img_shas
-    cmd = shell_out_with_systems_locale!("#{podman_cmd} pull -q #{fmt_opts new_resource.pull_opts} #{img_ref}")
+    cmd = shell_out_with_systems_locale!("#{podman_cmd} pull -q #{new_resource.pull_opts} #{img_ref}")
     !extant.any? { |img_sha| img_sha.end_with?(cmd.stdout.chomp) }
   end
 end
