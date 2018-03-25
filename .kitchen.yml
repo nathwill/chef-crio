@@ -10,6 +10,7 @@ verifier:
 
 platforms:
   - name: centos-7
+  - name: fedora-27
 
 suites:
   - name: default
