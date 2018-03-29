@@ -26,7 +26,7 @@ action_class do
 
   def pull_img
     extant = img_shas
-    cmd = shell_out_with_systems_locale!("#{podman_cmd} pull -q #{new_resource.pull_opts} #{img_ref}")
+    cmd = shell_out_with_systems_locale!("#{podman_cmd} pull -q #{new_resource.pull_opts} #{img_ref}", timeout: 3_600)
     !extant.any? { |img_sha| img_sha.end_with?(cmd.stdout.chomp) }
   end
 end
