@@ -12,4 +12,4 @@ yum_repository 'virt7-container-common' do
   only_if { platform?('centos') }
 end
 
-package %w(cri-o podman)
+package %w(cri-o cri-tools podman)
