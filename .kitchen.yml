@@ -38,13 +38,11 @@ suites:
             conmon: /usr/libexec/crio/conmon
             conmon_env:
               - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-            selinux: true
+            selinux: false
             seccomp_profile: /etc/crio/seccomp.json
             apparmor_profile: crio-default
-            cgroup_manager: systemd
+            cgroup_manager: cgroupfs
             hooks_dir_path: /usr/share/containers/oci/hooks.d
-            default_mounts:
-              - /usr/share/rhel/secrets:/run/secrets
             pids_limit: 1024
             enable_shared_pid_namespace: false
             log_size_max: -1
@@ -53,6 +51,8 @@ suites:
             pause_image: kubernetes/pause
             pause_command: /pause
             image_volumes: mkdir
+            registries:
+              - docker.io
           network:
             network_dir: /etc/cni/net.d/
             plugin_dir: /usr/libexec/cni
