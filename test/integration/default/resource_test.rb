@@ -37,8 +37,8 @@ control 'runs container' do
     its('content') { should match 'Redis' }
   end
 
-  # generates container id-file
-  describe file('/var/run/redis.crio') do
+  # generates pid-file
+  describe file('/run/redis.pid') do
     it { should be_file }
   end
 
