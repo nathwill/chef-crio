@@ -1,3 +1,9 @@
+# 1.3.0 / 2018-04-12
+
+* update to latest podman
+* use conmon-pidfile instead of cgroup placement
+* add alternative package repo
+
 # 1.2.2 / 2018-03-29
 
 * set image pull timeout
