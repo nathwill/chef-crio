@@ -24,16 +24,12 @@ default_action :create
 
         [Service]
         Type=forking
-        ExecStartPre=-#{podman_cmd} stop %p
-        ExecStartPre=-#{podman_cmd} rm %p
-        ExecStart=#{podman_cmd} run --detach #{new_resource.run_opts} \\
-            --cidfile=/var/run/%p.crio --cgroup-parent=/machine.slice/%p.service \\
-            --name=%p #{img_ref} #{new_resource.command}
+        PIDFile=/run/%p.pid
+        ExecStart=#{podman_cmd} run -d #{new_resource.run_opts} --name=%p \\
+            --conmon-pidfile=/run/%p.pid #{img_ref} #{new_resource.command}
         ExecStop=#{podman_cmd} stop %p
-        ExecStop=#{podman_cmd} rm %p
-        Restart=always
-        Delegate=yes
-        Slice=machine.slice
+        ExecStopPost=#{podman_cmd} rm %p
+        Restart=on-failure
 
         [Install]
         WantedBy=multi-user.target
