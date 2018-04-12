@@ -51,10 +51,4 @@ control 'runs container' do
   describe command('netstat -lptn') do
     its('stdout') { should match ':::6379' }
   end
-
-  # podman put processes into service unit cgroup
-  describe command('systemd-cgls /machine.slice/redis.service') do
-    its('stdout') { should match 'redis-server' }
-    its('stdout') { should match 'conmon' }
-  end
 end
