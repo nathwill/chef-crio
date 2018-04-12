@@ -19,6 +19,7 @@ suites:
       - recipe[test::resources]
     attributes:
       crio:
+        repo: upstream-crio-family
         network:
           - --enable-metrics
         conf:
