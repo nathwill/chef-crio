@@ -29,7 +29,7 @@ default_action :create
             --conmon-pidfile=/run/%p.pid #{img_ref} #{new_resource.command}
         ExecStop=#{podman_cmd} stop %p
         ExecStopPost=#{podman_cmd} rm %p
-        Restart=on-failure
+        Restart=always
 
         [Install]
         WantedBy=multi-user.target
