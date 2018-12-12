@@ -1,3 +1,7 @@
+# 1.3.3 / 2018-12-11
+
+* rm before start
+
 # 1.3.0 / 2018-04-12
 
 * update to latest podman
