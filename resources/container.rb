@@ -5,6 +5,7 @@ property :run_opts, [String, Array], default: [], coerce: CrioCookbook::FMT_OPT_
 property :pull_opts, [String, Array], default: [], coerce: CrioCookbook::FMT_OPT_PROC
 property :global_opts, [String, Array], default: [], coerce: CrioCookbook::FMT_OPT_PROC
 property :pull_image, [TrueClass, FalseClass], default: false
+property :stop_sleep, Integer, default: 0
 property :command, String
 
 alias_method :repo, :image
@@ -29,6 +30,7 @@ default_action :create
         ExecStart=#{podman_cmd} run -d #{new_resource.run_opts} --name=%p \\
             --conmon-pidfile=/run/%p.pid #{img_ref} #{new_resource.command}
         ExecStop=#{podman_cmd} stop %p
+        ExecStopPost=/usr/bin/sleep #{new_resource.stop_sleep}
         ExecStopPost=#{podman_cmd} rm %p
         Restart=always
 
