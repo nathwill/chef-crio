@@ -1,3 +1,7 @@
+# 1.3.4 / 2019-02-13
+
+* sleep before rm
+
 # 1.3.3 / 2018-12-11
 
 * rm before start
