@@ -1,3 +1,7 @@
+# 1.3.6 / 2019-05-14
+
+* update for Chef 15 deprecations
+
 # 1.3.5 / 2019-03-19
 
 * force rm before start
