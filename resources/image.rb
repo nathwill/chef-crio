@@ -15,18 +15,18 @@ action_class do
   include CrioCookbook::Mixins::ResourceMethods
 
   def img_refs
-    cmd = shell_out_with_systems_locale!("#{podman_cmd} images --format '{{.Repository}}:{{.Tag}}'")
+    cmd = shell_out!("#{podman_cmd} images --format '{{.Repository}}:{{.Tag}}'", default_env: false)
     cmd.stdout.split("\n")
   end
 
   def img_shas
-    cmd = shell_out_with_systems_locale!("#{podman_cmd} images -q --no-trunc")
+    cmd = shell_out!("#{podman_cmd} images -q --no-trunc", default_env: false)
     cmd.stdout.split("\n")
   end
 
   def pull_img
     extant = img_shas
-    cmd = shell_out_with_systems_locale!("#{podman_cmd} pull -q #{new_resource.pull_opts} #{img_ref}", timeout: 3_600)
+    cmd = shell_out!("#{podman_cmd} pull -q #{new_resource.pull_opts} #{img_ref}", default_env: false, timeout: 3_600)
     !extant.any? { |img_sha| img_sha.end_with?(cmd.stdout.chomp) }
   end
 end
