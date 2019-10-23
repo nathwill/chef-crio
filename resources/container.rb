@@ -27,6 +27,7 @@ default_action :create
         Type=forking
         PIDFile=/run/%p.pid
         ExecStartPre=-#{podman_cmd} rm -f %p
+        ExecStartPre=-#{podman_cmd} rm --storage %p
         ExecStart=#{podman_cmd} run -d #{new_resource.run_opts} --name=%p \\
             --conmon-pidfile=/run/%p.pid #{img_ref} #{new_resource.command}
         ExecStop=#{podman_cmd} stop %p
